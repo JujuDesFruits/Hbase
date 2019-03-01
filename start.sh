@@ -37,3 +37,7 @@ done
 
 # get into hbase master container
 sudo docker exec -it hbase-master bash
+
+VBoxManage startvm "Hbase-master" --type headless
+VBoxManage startvm "Hbase-slave1" --type headless
+VBoxManage startvm "Hbase-slave2" --type headless
