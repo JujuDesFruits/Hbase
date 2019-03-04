@@ -4,10 +4,10 @@ POC cluster HBase and discover column database
 for this project you will need Virtualbox and Ansible to manage your different node on each Centos representing different server.
 
 You will find:
-- [start.sh]() who is charged of creating 3 machines with virtualbox
-- [playbook_base]() that will configure all prerequisites for each machines
-- [playbook_master]() which will be responsible of the master node
-- [playbook_slave]() do the same thing for slave node
+- [start.sh](https://github.com/JujuDesFruits/Hbase/blob/master/start.sh) who is charged of creating 3 machines with virtualbox
+- [playbook_base](https://github.com/JujuDesFruits/Hbase/blob/master/roles/base/base.md) that will configure all prerequisites for each machines
+- [playbook_master](https://github.com/JujuDesFruits/Hbase/blob/master/roles/base/master.md) which will be responsible of the master node
+- [playbook_slave](https://github.com/JujuDesFruits/Hbase/blob/master/roles/base/slave.md) do the same thing for slave node
 
 #### info Ubuntu
 If you want to make your own machine and don't use the script **start.sh** here is a brief description of what I suggest for Ubuntu.  
