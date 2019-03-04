@@ -1,8 +1,3 @@
-- include: interface.yml
 
-- apt: update_cache=yes cache_valid_time=86400
-  when: ansible_distribution == 'Ubuntu'
-
-- package:
-    name:
-      - default-jdk
+- name: ssh key to authorized_keys
+  command : cat /home/hduser/.ssh/id_rsa.pub >> /home/hduser/.ssh/authorized_keys

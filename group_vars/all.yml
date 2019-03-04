@@ -1,1 +1,5 @@
-docker_data_root: /data
+base_env:
+  ansible_user: hduser
+  ansible_become: yes
+  ansible_become_pass: $6$hduser$sn14ciKozJ/aOrye3jpD1uQoF.OXh/2stFyaVvx/GkDH76tEg3h013W6.nKyCwVggG3/M3NXcJpQkODUlnm7B.
+  ansible_become_method: enable

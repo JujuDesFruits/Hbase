@@ -12,4 +12,8 @@ vagrant up
 
 cd $repo
 echo "building first layer for all servers"
-ansible playbook_base -i ALL
+ansible-playbook playbook_base.yml -i ALL --extra-vars "ansible_user=vagrant ansible_password=vagrant"
+
+ansible-playbook playbook_master.yml -i ALL --extra-vars "ansible_user=hduser ansible_password=hduser"
+
+ansible-playbook playbook_slave.yml -i ALL --extra-vars "ansible_user=hduser ansible_password=hduser"
