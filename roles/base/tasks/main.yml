@@ -5,4 +5,57 @@
 
 - package:
     name:
-      - default-jdk
+      - openjdk-7-jdk
+      - ssh
+      - sshd
+
+- name: Ensure group "hadoop_group" exists
+  group:
+    name: hadoop_group
+    state: present
+
+- name: Add user hduser
+  user:
+    name: hduser
+    groups: hadoop_group, sudo
+    append: yes
+
+- name: Generate /etc/ssh/ RSA key
+  command : ssh-keygen -t rsa -P ""
+  become: yes
+  become_user: hduser
+
+- name: ssh key to authorized_keys
+  command : cat $HOME/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys
+  mode: 644
+  become: yes
+  become_user: hduser
+
+- name: download hadoop
+  get_url:
+    url: https://apache.mirrors.benatherton.com/hadoop/core/hadoop-3.2.0/hadoop-3.2.0.tar.gz
+    dest: /usr/local
+
+- name: Extract archive
+  unarchive:
+    src: /usr/local/hadoop-3.2.0.tar.gz
+    dest: /usr/local
+    owner: hduser
+    mode: 644
+    extra_opts: [--strip-components=1]
+
+- name: line insert
+  lineinfile:
+    path: ~/.bashrc
+    line: "{{ item }}"
+  become: yes
+  become_user: hduser
+  with_items:
+    - 'export HADOOP_HOME=/home/hadoop/hadoop'
+    - 'export HADOOP_INSTALL=$HADOOP_HOME'
+    - 'export HADOOP_MAPRED_HOME=$HADOOP_HOME'
+    - 'export HADOOP_COMMON_HOME=$HADOOP_HOME'
+    - 'export HADOOP_HDFS_HOME=$HADOOP_HOME'
+    - 'export YARN_HOME=$HADOOP_HOME'
+    - 'export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native'
+    - 'export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bi'

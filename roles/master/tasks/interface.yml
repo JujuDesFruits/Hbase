@@ -1,0 +1,15 @@
+- include: interface.yml
+
+- pacman: update_cache=yes
+  when: ansible_distribution == 'centos'
+
+- package:
+    name:
+      -
+    state: present
+
+- name: config prosody
+  copy:
+    src: prosody_ddi-videotool.multimediabs.com.cfg.lua
+    dest: /etc/prosody/conf.avail/ddi-videotool.multimediabs.com.cfg.lua
+  notify: service prosody restart
