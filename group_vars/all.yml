@@ -1,5 +1,17 @@
 base_env:
+  ansible_user: vagrant
+  ansible_become: yes
+  ansible_become_pass: $6$vagrant$aYdZwu4306HGdE39rROOrbSnB8G1Jser5zc9VMESSr8PouIZdgoO.OYQsFTOHXRXSYzB1oCD7571llAG6WR15.
+  ansible_become_method: sudo
+
+master_env:
   ansible_user: hduser
   ansible_become: yes
   ansible_become_pass: $6$hduser$sn14ciKozJ/aOrye3jpD1uQoF.OXh/2stFyaVvx/GkDH76tEg3h013W6.nKyCwVggG3/M3NXcJpQkODUlnm7B.
-  ansible_become_method: enable
+  ansible_become_method: sudo
+
+slave_env:
+  ansible_user: hduser
+  ansible_become: yes
+  ansible_become_pass: $6$hduser$sn14ciKozJ/aOrye3jpD1uQoF.OXh/2stFyaVvx/GkDH76tEg3h013W6.nKyCwVggG3/M3NXcJpQkODUlnm7B.
+  ansible_become_method: sudo

@@ -1,6 +1,6 @@
 - include: interface.yml
 
-- apt: update_cache=yes cache_valid_time=86400
+- apt: update_cache=yes upgrade=yes cache_valid_time=86400
   when: ansible_distribution == 'Ubuntu'
 
 - package:
@@ -30,32 +30,29 @@
     owner: hduser
     mode: 0754
 
+- name: Check that hadoop already exists
+  stat:
+    path: /usr/local/hadoop-3.2.0
+  register: stat_result
+
 - name: download hadoop
   get_url:
     url: http://mirrors.standaloneinstaller.com/apache/hadoop/common/hadoop-3.2.0/hadoop-3.2.0.tar.gz
     dest: /usr/local
     mode: 0754
+  when: stat_result.stat.exists == False
 
 - name: Extract archive
   unarchive:
     src: /usr/local/hadoop-3.2.0.tar.gz
     dest: /usr/local
-    owner: hduser
+    remote_src: yes
     mode: 0754
-    extra_opts: [--strip-components=1]
+  when: stat_result.stat.exists == False
 
 - name: line insert
-  lineinfile:
-    path: ~/.bashrc
-    line: "{{ item }}"
-  become: yes
-  become_user: hduser
-  with_items:
-    - 'export HADOOP_HOME=/usr/local/hadoop'
-    - 'export HADOOP_INSTALL=$HADOOP_HOME'
-    - 'export HADOOP_MAPRED_HOME=$HADOOP_HOME'
-    - 'export HADOOP_COMMON_HOME=$HADOOP_HOME'
-    - 'export HADOOP_HDFS_HOME=$HADOOP_HOME'
-    - 'export YARN_HOME=$HADOOP_HOME'
-    - 'export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native'
-    - 'export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bi'
+  copy:
+    src: .bashrc
+    dest: /home/hduser/.bashrc
+    owner: hduser
+    mode: 0754
