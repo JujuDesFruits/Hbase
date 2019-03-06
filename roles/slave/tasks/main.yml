@@ -45,6 +45,7 @@
     dest: /usr/local/hadoop-3.2.0/etc/hadoop/hdfs-site.xml
     owner: hduser
     mode: 0754
+  become: yes
 
 - name: change confi hadoop-env.sh
   copy:
