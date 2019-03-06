@@ -47,3 +47,10 @@
     dest: /usr/local/hadoop-3.2.0/etc/hadoop/hadoop-env.sh
     owner: hduser
     mode: 0754
+
+- name: change confi master
+  copy:
+    src: master
+    dest: /usr/local/hadoop-3.2.0/etc/hadoop/master
+    owner: hduser
+    mode: 0754
