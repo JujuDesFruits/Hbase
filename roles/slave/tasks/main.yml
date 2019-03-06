@@ -1,6 +1,7 @@
 - include: interface.yml
 
 - apt: update_cache=yes upgrade=yes cache_valid_time=86400
+  become: yes
   when: ansible_distribution == 'Ubuntu'
 
 - name: ssh key to authorized_keys
@@ -12,6 +13,7 @@
     dest: /usr/local/hadoop-3.2.0/etc/hadoop/hadoop-env.sh
     owner: hduser
     mode: 0754
+  become: yes
 
 - name: Creates hadoop tmp directory
   file:
@@ -19,6 +21,7 @@
     state: directory
     owner: hduser
     mode: 0754
+  become: yes
 
 - name: change confi core-site.xml
   copy:
@@ -26,6 +29,7 @@
     dest: /usr/local/hadoop-3.2.0/etc/hadoop/core-site.xml
     owner: hduser
     mode: 0754
+  become: yes
 
 - name: change confi mapred-site.xml
   copy:
@@ -33,6 +37,7 @@
     dest: /usr/local/hadoop-3.2.0/etc/hadoop/mapred-site.xml
     owner: hduser
     mode: 0754
+  become: yes
 
 - name: change confi hdfs-site.xml
   copy:
@@ -47,6 +52,7 @@
     dest: /usr/local/hadoop-3.2.0/etc/hadoop/hadoop-env.sh
     owner: hduser
     mode: 0754
+  become: yes
 
 - name: change confi slaves
   copy:
@@ -54,3 +60,4 @@
     dest: /usr/local/hadoop-3.2.0/etc/hadoop/slaves
     owner: hduser
     mode: 0754
+  become: yes
