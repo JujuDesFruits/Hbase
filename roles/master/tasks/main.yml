@@ -4,8 +4,13 @@
   become: yes
   when: ansible_distribution == 'Ubuntu'
 
-- name: ssh key to authorized_keys
-  shell : cat /home/hduser/.ssh/id_rsa.pub > /home/hduser/.ssh/authorized_keys
+- name: change confi authorized_keys
+  copy:
+    src: authorized_keys
+    dest: /home/hduser/.ssh/authorized_keys
+    owner: hduser
+    mode: 0754
+  become: yes
 
 - name: change confi hadoop-env.sh
   copy:
@@ -63,6 +68,10 @@
     mode: 0754
   become: yes
 
+- name: remove tmp files
+  shell: rm -Rf /app/hadoop/tmp/*
+  become: yes
+
 - name: formatting the HDFS
   shell: /usr/local/hadoop-3.2.0/bin/hadoop namenode -format
   become: yes
@@ -70,3 +79,4 @@
 - name: starting cluster hadoop
   shell: sh /usr/local/hadoop-3.2.0/sbin/start-all.sh
   become: yes
+  environment: "{{master_env}}"

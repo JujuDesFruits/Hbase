@@ -15,3 +15,13 @@ slave_env:
   ansible_become: yes
   ansible_become_pass: $6$hduser$sn14ciKozJ/aOrye3jpD1uQoF.OXh/2stFyaVvx/GkDH76tEg3h013W6.nKyCwVggG3/M3NXcJpQkODUlnm7B.
   ansible_become_method: sudo
+
+bash_env:
+  HADOOP_HOME: /usr/local/hadoop-3.2.0
+  HADOOP_INSTALL: $HADOOP_HOME
+  HADOOP_MAPRED_HOME: $HADOOP_HOME
+  HADOOP_COMMON_HOME: $HADOOP_HOME
+  HADOOP_HDFS_HOME: $HADOOP_HOME
+  YARN_HOME: $HADOOP_HOME
+  HADOOP_COMMON_LIB_NATIVE_DIR: $HADOOP_HOME/lib/native
+  PATH: $PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bi

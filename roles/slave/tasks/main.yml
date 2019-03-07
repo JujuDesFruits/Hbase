@@ -3,9 +3,14 @@
 - apt: update_cache=yes upgrade=yes cache_valid_time=86400
   become: yes
   when: ansible_distribution == 'Ubuntu'
-
-- name: ssh key to authorized_keys
-  shell : cat /home/hduser/.ssh/id_rsa.pub > /home/hduser/.ssh/authorized_keys
+  
+- name: change confi authorized_keys
+  copy:
+    src: authorized_keys
+    dest: /home/hduser/.ssh/authorized_keys
+    owner: hduser
+    mode: 0754
+  become: yes
 
 - name: change confi hadoop-env.sh
   copy:
@@ -61,4 +66,8 @@
     dest: /usr/local/hadoop-3.2.0/etc/hadoop/slaves
     owner: hduser
     mode: 0754
+  become: yes
+
+- name: remove tmp files
+  shell: rm -Rf /app/hadoop/tmp/*
   become: yes
