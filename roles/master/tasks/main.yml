@@ -68,15 +68,21 @@
     mode: 0754
   become: yes
 
+- name: don't know why but I cannot execute folder without being root so
+  shell: chmod -R 777 /usr/lib/jvm
+  become: yes
+
+- name: this is ugly but it works, now I have all rigths
+  shell: chmod -R 777 /usr/lib/jvm
+  become: yes
+
 - name: remove tmp files
   shell: rm -Rf /app/hadoop/tmp/*
   become: yes
 
 - name: formatting the HDFS
   shell: /usr/local/hadoop-3.2.0/bin/hadoop namenode -format
-  become: yes
 
 - name: starting cluster hadoop
-  shell: sh /usr/local/hadoop-3.2.0/sbin/start-all.sh
-  become: yes
-  environment: "{{master_env}}"
+  shell: /usr/local/hadoop-3.2.0/sbin/start-all.sh
+  environment: "{{bash_env}}"
