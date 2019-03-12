@@ -61,6 +61,12 @@
     mode: 0754
   when: stat_result_java.stat.exists == False
 
+- name: Creates directory
+  file:
+    path: /usr/lib/jvm
+    state: directory
+    mode: 777
+
 - name: Extract archive java-jdk
   unarchive:
     src: /tmp/openjdk-11.0.2_linux-x64_bin.tar.gz

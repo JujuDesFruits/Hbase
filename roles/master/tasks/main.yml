@@ -73,7 +73,7 @@
   become: yes
 
 - name: this is ugly but it works, now I have all rigths
-  shell: chmod -R 777 /usr/lib/jvm
+  shell: chmod -R 777 /usr/local/hadoop-3.2.0
   become: yes
 
 - name: remove tmp files
@@ -82,7 +82,20 @@
 
 - name: formatting the HDFS
   shell: /usr/local/hadoop-3.2.0/bin/hadoop namenode -format
+  become: yes
+  ignore_errors: true
+
+- name: import environement
+  shell: "{{ item }}"
+  with_items:
+    - export HADOOP_HOME=/usr/local/hadoop-3.2.0
+    - export HADOOP_INSTALL=$HADOOP_HOME
+    - export HADOOP_MAPRED_HOME=$HADOOP_HOME
+    - export HADOOP_COMMON_HOME=$HADOOP_HOME
+    - export HADOOP_HDFS_HOME=$HADOOP_HOME
+    - export YARN_HOME=$HADOOP_HOME
+    - export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+    - export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bi
 
 - name: starting cluster hadoop
   shell: /usr/local/hadoop-3.2.0/sbin/start-all.sh
-  environment: "{{bash_env}}"
