@@ -1,0 +1,4 @@
+---
+hadoop_user: hadoop
+hadoop_group: hadoop
+hadoop_download_url: http://www-eu.apache.org/dist/hadoop/common/hadoop-3.1.2/hadoop-3.1.2.tar.gz

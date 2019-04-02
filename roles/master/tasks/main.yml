@@ -1,101 +1,41 @@
-- include: interface.yml
+---
+- include_vars: "{{ nodesfile }}"
 
-- apt: update_cache=yes upgrade=yes cache_valid_time=86400
-  become: yes
-  when: ansible_distribution == 'Ubuntu'
+- name: Copy private key into place
+  template: src=hadoop_rsa dest=/home/{{ hadoop_user }}/.ssh/hadoop_rsa owner={{ hadoop_user }} group={{ hadoop_group}} mode=0600
 
-- name: change confi authorized_keys
-  copy:
-    src: authorized_keys
-    dest: /home/hduser/.ssh/authorized_keys
-    owner: hduser
-    mode: 0754
-  become: yes
+- name: Copy slaves into place
+  template: src=slaves dest=/usr/local/hadoop/etc/hadoop/slaves owner={{ hadoop_user }} group={{ hadoop_group}}
 
-- name: change confi hadoop-env.sh
-  copy:
-    src: hadoop-env.sh
-    dest: /usr/local/hadoop-3.2.0/etc/hadoop/hadoop-env.sh
-    owner: hduser
-    mode: 0754
-  become: yes
+- name: Copy workers into place
+  template: src=slaves dest=/usr/local/hadoop/etc/hadoop/workers owner={{ hadoop_user }} group={{ hadoop_group}}
 
-- name: Creates hadoop tmp directory
-  file:
-    path: /app/hadoop/tmp
-    state: directory
-    owner: hduser
-    mode: 0754
-  become: yes
+- name: prepare known_hosts entries
+  shell: ssh-keyscan -t rsa {{ item.hostname }}
+  with_items: "{{ nodes }}"
+  register: keyscans
 
-- name: change confi core-site.xml
-  copy:
-    src: core-site.xml
-    dest: /usr/local/hadoop-3.2.0/etc/hadoop/core-site.xml
-    owner: hduser
-    mode: 0754
-  become: yes
+- name: prepare known_hosts
+  lineinfile:
+    dest=/home/{{ hadoop_user }}/.ssh/known_hosts
+    create=yes
+    state=present
+    line="{{ item.stdout }}"
+    regexp="^{{ item.item.hostname }}"
+    owner={{ hadoop_user }}
+    group={{ hadoop_group }}
+  with_items: "{{ keyscans.results }}"
 
-- name: change confi mapred-site.xml
-  copy:
-    src: mapred-site.xml
-    dest: /usr/local/hadoop-3.2.0/etc/hadoop/mapred-site.xml
-    owner: hduser
-    mode: 0754
-  become: yes
+- name: prepare known_hosts entries
+  shell: ssh-keyscan -t rsa 0.0.0.0
+  register: keyscan_0_0_0_0
 
-- name: change confi hdfs-site.xml
-  copy:
-    src: hdfs-site.xml
-    dest: /usr/local/hadoop-3.2.0/etc/hadoop/hdfs-site.xml
-    owner: hduser
-    mode: 0754
-  become: yes
-
-- name: change confi hadoop-env.sh
-  copy:
-    src: hadoop-env.sh
-    dest: /usr/local/hadoop-3.2.0/etc/hadoop/hadoop-env.sh
-    owner: hduser
-    mode: 0754
-  become: yes
-
-- name: change confi master
-  copy:
-    src: masters
-    dest: /usr/local/hadoop-3.2.0/etc/hadoop/masters
-    owner: hduser
-    mode: 0754
-  become: yes
-
-- name: don't know why but I cannot execute folder without being root so
-  shell: chmod -R 777 /usr/lib/jvm
-  become: yes
-
-- name: this is ugly but it works, now I have all rigths
-  shell: chmod -R 777 /usr/local/hadoop-3.2.0
-  become: yes
-
-- name: remove tmp files
-  shell: rm -Rf /app/hadoop/tmp/*
-  become: yes
-
-- name: formatting the HDFS
-  shell: /usr/local/hadoop-3.2.0/bin/hadoop namenode -format
-  become: yes
-  ignore_errors: true
-
-- name: import environement
-  shell: "{{ item }}"
-  with_items:
-    - export HADOOP_HOME=/usr/local/hadoop-3.2.0
-    - export HADOOP_INSTALL=$HADOOP_HOME
-    - export HADOOP_MAPRED_HOME=$HADOOP_HOME
-    - export HADOOP_COMMON_HOME=$HADOOP_HOME
-    - export HADOOP_HDFS_HOME=$HADOOP_HOME
-    - export YARN_HOME=$HADOOP_HOME
-    - export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
-    - export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bi
-
-- name: starting cluster hadoop
-  shell: /usr/local/hadoop-3.2.0/sbin/start-all.sh
+- name: add 0.0.0.0 to known_hosts for secondary namenode
+  lineinfile:
+    dest=/home/{{ hadoop_user }}/.ssh/known_hosts
+    create=yes
+    state=present
+    line="{{ keyscan_0_0_0_0.stdout }}"
+    regexp="^0.0.0.0"
+    owner={{ hadoop_user }}
+    group={{ hadoop_group }}

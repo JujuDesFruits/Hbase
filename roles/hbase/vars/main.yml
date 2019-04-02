@@ -1,0 +1,5 @@
+---
+hadoop_user: hadoop
+hadoop_group: hadoop
+hbase_download_url: http://apache.crihan.fr/dist/hbase/1.4.9/hbase-1.4.9-bin.tar.gz
+htrace_download_url: http://repo1.maven.org/maven2/org/apache/htrace/htrace-core/3.1.0-incubating/htrace-core-3.1.0-incubating.jar

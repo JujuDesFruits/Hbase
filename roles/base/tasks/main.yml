@@ -9,75 +9,9 @@
       - openssh-client
       - openssh-server
 
-- name: Ensure group "hadoop_group" exists
-  group:
-    name: hadoop_group
-    state: present
-
-- name: Add user hduser
-  user:
-    name: hduser
-    password: $6$hduser$sn14ciKozJ/aOrye3jpD1uQoF.OXh/2stFyaVvx/GkDH76tEg3h013W6.nKyCwVggG3/M3NXcJpQkODUlnm7B.
-    groups: hadoop_group, sudo
-    generate_ssh_key: yes
-    append: yes
-
-- name: hosts config
+- name: ssh config vagrant
   copy:
-    src: hosts
-    dest: /etc/hosts
-    owner: hduser
-    mode: 0754
-
-- name: Check that hadoop already exists
-  stat:
-    path: /usr/local/hadoop-3.2.0
-  register: stat_result_hadoop
-
-- name: download hadoop
-  get_url:
-    url: http://mirrors.standaloneinstaller.com/apache/hadoop/common/hadoop-3.2.0/hadoop-3.2.0.tar.gz
-    dest: /tmp
-    mode: 0754
-  when: stat_result_hadoop.stat.exists == False
-
-- name: Extract archive hadoop
-  unarchive:
-    src: /tmp/hadoop-3.2.0.tar.gz
-    dest: /usr/local
-    remote_src: yes
-    mode: 0754
-  when: stat_result_hadoop.stat.exists == False
-
-- name: Check that java-jdk already exists
-  stat:
-    path: /usr/lib/jvm/jdk-11.0.2
-  register: stat_result_java
-
-- name: download java-jdk
-  get_url:
-    url: https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz
-    dest: /tmp
-    mode: 0754
-  when: stat_result_java.stat.exists == False
-
-- name: Creates directory
-  file:
-    path: /usr/lib/jvm
-    state: directory
-    mode: 777
-
-- name: Extract archive java-jdk
-  unarchive:
-    src: /tmp/openjdk-11.0.2_linux-x64_bin.tar.gz
-    dest: /usr/lib/jvm
-    remote_src: yes
-    mode: 0754
-  when: stat_result_java.stat.exists == False
-
-- name: line insert
-  copy:
-    src: .bashrc
-    dest: /home/hduser/.bashrc
-    owner: hduser
+    src: authorized_keys
+    dest: /home/vagrant/.ssh/authorized_keys
+    owner: vagrant
     mode: 0754

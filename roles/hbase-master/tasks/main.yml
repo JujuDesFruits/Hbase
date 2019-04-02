@@ -1,0 +1,4 @@
+- include: interface.yml
+
+- name: Add the hbase-site.xml
+  template: src=hbase-site.xml dest=/home/hadoop/hbase/hbase-1.4.9/conf/hbase-site.xml owner={{ hadoop_user}} group={{ hadoop_group }}

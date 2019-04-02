@@ -1,5 +1,5 @@
-- hosts: all
+---
+- hosts: cluster
   become: yes
   roles:
     - base
-  environment: "{{base_env}}"

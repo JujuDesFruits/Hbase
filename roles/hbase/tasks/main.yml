@@ -1,0 +1,40 @@
+---
+- include_vars: "{{ nodesfile }}"
+
+- name: Creates directory
+  file:
+    path: /home/hadoop/hbase
+    state: directory
+    mode: 777
+
+- name: Creates directory
+  file:
+    path: /usr/local/zookeeper
+    state: directory
+    mode: 777
+
+- name: Download hbase
+  get_url: url={{ hbase_download_url }} dest=/home/{{ hadoop_user }}/hbase/hbase-1.4.9-bin.tar.gz
+  environment: proxy_env
+
+- name: Extract hadoop archive
+  unarchive: src=/home/{{ hadoop_user }}/hbase/hbase-1.4.9-bin.tar.gz dest=/home/{{ hadoop_user }}/hbase/ owner={{ hadoop_user}} group={{ hadoop_group }} copy=no
+
+#- name: Download htrace
+#  get_url: url={{ htrace_download_url }} dest=/home/{{ hadoop_user }}/hbase/hbase-2.1.4/lib/client-facing-thirdparty/htrace-core-3.1.0-incubating.jar
+#  environment: proxy_env
+
+- lineinfile: dest=/home/hadoop/.bashrc regexp="HBASE_HOME=" line="export HBASE_HOME=/home/hadoop/hbase/hbase-1.4.9"
+- lineinfile: dest=/home/hadoop/.bashrc regexp="PATH=" line="export PATH=$HBASE_HOME/bin:$PATH"s
+
+- name: Add the regionservers
+  template: src=regionservers dest=/home/hadoop/hbase/hbase-1.4.9/conf/regionservers owner={{ hadoop_user}} group={{ hadoop_group }}
+
+- name: Add the env sh
+  template: src=hbase-env.sh dest=/home/hadoop/hbase/hbase-1.4.9/conf/hbase-env.sh owner={{ hadoop_user}} group={{ hadoop_group }}
+
+- name: give authorisation
+  shell: sudo chmod 777 -R /home/hadoop/hbase
+
+- name: give authorisation
+  shell: sudo chmod 777 -R /usr/local/zookeeper

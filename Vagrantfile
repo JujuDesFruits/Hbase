@@ -1,33 +1,61 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-Vagrant.configure(2) do |config|
-  config.vm.box = "ubuntu/trusty64"
+#http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/ClusterSetup.html
 
-  config.vm.define :master do |master_config|
-      master_config.vm.host_name = "hbase-master"
-      master_config.vm.network "private_network", ip:"192.168.56.101"
-      master_config.vm.provider :virtualbox do |vb|
-          vb.customize ["modifyvm", :id, "--memory", "2048"]
-          vb.customize ["modifyvm", :id, "--cpus", "2"]
-      end
+MASTER_IP               = '192.168.56.101'
+DATA1_IP                = '192.168.56.102'
+DATA2_IP                = '192.168.56.103'
+
+Vagrant.configure("2") do |config|
+
+  config.ssh.insert_key = false
+
+  # define Master server
+  config.vm.define "master" do |master|
+    master.vm.hostname = "hadoop-master"
+    master.vm.box = "ubuntu/trusty64"
+    master.vm.synced_folder ".", "/home/vagrant/src", mount_options: ["dmode=775,fmode=664"]
+    master.vm.network "private_network", ip: MASTER_IP
+    master.vm.provider "virtualbox" do |v|
+      v.name = "master"
+      v.cpus = 2
+      v.memory = 3072
+    end
+    config.vm.provision "shell", inline: <<-SCRIPT
+      yes | ssh-keygen -b 2048 -t rsa -f /home/vagrant/.ssh/id_rsa -q -N ""
+    SCRIPT
+    #master.vm.provision "shell", path: "bootstrap-master.sh"
   end
 
-  config.vm.define :slave1 do |slave1_config|
-      slave1_config.vm.host_name = "hbase-slave1"
-      slave1_config.vm.network "private_network", ip:"192.168.56.102"
-      slave1_config.vm.provider :virtualbox do |vb|
-          vb.customize ["modifyvm", :id, "--memory", "1024"]
-          vb.customize ["modifyvm", :id, "--cpus", "2"]
-      end
+  # define data1 server
+  config.vm.define "data1" do |data1|
+    data1.vm.hostname = "hadoop-data1"
+    data1.vm.box = "ubuntu/trusty64"
+    data1.vm.network "private_network", ip: DATA1_IP
+    data1.vm.provider "virtualbox" do |v|
+      v.name = "data1"
+      v.cpus = 2
+      v.memory = 3072
+    end
+    config.vm.provision "shell", inline: <<-SCRIPT
+      yes | ssh-keygen -b 2048 -t rsa -f /home/vagrant/.ssh/id_rsa -q -N ""
+    SCRIPT
   end
 
-  config.vm.define :slave2 do |slave2_config|
-      slave2_config.vm.host_name = "hbase-slave2"
-      slave2_config.vm.network "private_network", ip:"192.168.56.103"
-      slave2_config.vm.provider :virtualbox do |vb|
-          vb.customize ["modifyvm", :id, "--memory", "1024"]
-          vb.customize ["modifyvm", :id, "--cpus", "2"]
-      end
+  # define data2 server
+  config.vm.define "data2" do |data2|
+    data2.vm.hostname = "hadoop-data2"
+    data2.vm.box = "ubuntu/trusty64"
+    data2.vm.network "private_network", ip: DATA2_IP
+    data2.vm.provider "virtualbox" do |v|
+      v.name = "data2"
+      v.cpus = 2
+      v.memory = 3072
+    end
+    config.vm.provision "shell", inline: <<-SCRIPT
+      yes | ssh-keygen -b 2048 -t rsa -f /home/vagrant/.ssh/id_rsa -q -N ""
+    SCRIPT
   end
+
 end

@@ -3,60 +3,20 @@
 - apt: update_cache=yes upgrade=yes cache_valid_time=86400
   become: yes
   when: ansible_distribution == 'Ubuntu'
-  
+
 - name: change confi authorized_keys
   copy:
     src: authorized_keys
-    dest: /home/hduser/.ssh/authorized_keys
-    owner: hduser
+    dest: /home/vagrant/.ssh/authorized_keys
+    owner: vagrant
     mode: 0754
   become: yes
 
-- name: change confi hadoop-env.sh
+- name: change confi masters
   copy:
-    src: hadoop-env.sh
-    dest: /usr/local/hadoop-3.2.0/etc/hadoop/hadoop-env.sh
-    owner: hduser
-    mode: 0754
-  become: yes
-
-- name: Creates hadoop tmp directory
-  file:
-    path: /app/hadoop/tmp
-    state: directory
-    owner: hduser
-    mode: 0754
-  become: yes
-
-- name: change confi core-site.xml
-  copy:
-    src: core-site.xml
-    dest: /usr/local/hadoop-3.2.0/etc/hadoop/core-site.xml
-    owner: hduser
-    mode: 0754
-  become: yes
-
-- name: change confi mapred-site.xml
-  copy:
-    src: mapred-site.xml
-    dest: /usr/local/hadoop-3.2.0/etc/hadoop/mapred-site.xml
-    owner: hduser
-    mode: 0754
-  become: yes
-
-- name: change confi hdfs-site.xml
-  copy:
-    src: hdfs-site.xml
-    dest: /usr/local/hadoop-3.2.0/etc/hadoop/hdfs-site.xml
-    owner: hduser
-    mode: 0754
-  become: yes
-
-- name: change confi hadoop-env.sh
-  copy:
-    src: hadoop-env.sh
-    dest: /usr/local/hadoop-3.2.0/etc/hadoop/hadoop-env.sh
-    owner: hduser
+    src: masters
+    dest: /usr/local/hadoop-3.2.0/etc/hadoop/masters
+    owner: vagrant
     mode: 0754
   become: yes
 
@@ -64,7 +24,7 @@
   copy:
     src: slaves
     dest: /usr/local/hadoop-3.2.0/etc/hadoop/slaves
-    owner: hduser
+    owner: vagrant
     mode: 0754
   become: yes
 

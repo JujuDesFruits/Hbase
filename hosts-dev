@@ -1,0 +1,20 @@
+[hadoop-master]
+192.168.56.101              ansible_connection=ssh
+
+[hadoop-data]
+192.168.56.102              ansible_connection=ssh
+192.168.56.103              ansible_connection=ssh
+
+[cluster]
+192.168.56.101              ansible_connection=ssh
+192.168.56.102              ansible_connection=ssh
+192.168.56.103              ansible_connection=ssh
+
+[hadoop-master:vars]
+nodesfile=nodes-dev
+
+[hadoop-data:vars]
+nodesfile=nodes-dev
+
+[cluster:vars]
+nodesfile=nodes-dev
