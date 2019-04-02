@@ -1,4 +1,0 @@
-- hosts: all
-  roles:
-    - master
-  environment: "{{master_env}}"

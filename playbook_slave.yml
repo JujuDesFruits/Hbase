@@ -1,4 +1,0 @@
-- hosts: all
-  roles:
-    - slave
-  environment: "{{slave_env}}"
