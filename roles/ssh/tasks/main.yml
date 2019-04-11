@@ -12,6 +12,6 @@
 - name: ssh config vagrant
   copy:
     src: authorized_keys
-    dest: /home/vagrant/.ssh/authorized_keys
-    owner: vagrant
+    dest: /home/hadoop/.ssh/authorized_keys
+    owner: hadoop
     mode: 0754

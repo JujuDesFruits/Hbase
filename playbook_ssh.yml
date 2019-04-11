@@ -2,4 +2,4 @@
 - hosts: cluster
   become: yes
   roles:
-    - base
+    - ssh
