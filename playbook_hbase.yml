@@ -1,21 +1,21 @@
 ---
 - name: Install hbase
   hosts: cluster
-  remote_user: ubuntu
+  remote_user: vagrant
   sudo: yes
   roles:
     - hbase
 
 - name: Install hbase
   hosts: hadoop-master
-  remote_user: ubuntu
+  remote_user: vagrant
   sudo: yes
   roles:
     - hbase-master
 
 - name: Install hbase
   hosts: hadoop-data
-  remote_user: ubuntu
+  remote_user: vagrant
   sudo: yes
   roles:
     - hbase-slave

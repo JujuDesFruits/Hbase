@@ -1,5 +1,7 @@
 ---
-- hosts: cluster
-  become: yes
+- name: ssh layer
+  hosts: cluster
+  remote_user: vagrant
+  sudo: yes
   roles:
     - ssh

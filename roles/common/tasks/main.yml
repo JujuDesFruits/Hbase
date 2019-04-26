@@ -4,7 +4,8 @@
 - group: name={{ hadoop_group}} state=present
 - user: name={{ hadoop_user }} password=$6$vagrant$aYdZwu4306HGdE39rROOrbSnB8G1Jser5zc9VMESSr8PouIZdgoO.OYQsFTOHXRXSYzB1oCD7571llAG6WR15. comment="Hadoop" group={{ hadoop_group}} generate_ssh_key=yes shell=/bin/bash
 
-
+- name: Copy id_rsa
+  copy: src=/home/hadoop/.ssh/id_rsa.pub dest=/home/vagrant/.ssh/id_rsa.pub owner=vagrant group=vagrant remote_src=yes
 
 # this is a bandwidth heavy task which downloads hadoop binaries to each node
 #- name: Download hadoop

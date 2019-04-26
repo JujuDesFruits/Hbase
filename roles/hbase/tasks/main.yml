@@ -1,13 +1,13 @@
 ---
 - include_vars: "{{ nodesfile }}"
 
-- name: Creates directory
+- name: Creates directory hbase
   file:
     path: /home/hadoop/hbase
     state: directory
     mode: 777
 
-- name: Creates directory
+- name: Creates directory zookeeper
   file:
     path: /usr/local/zookeeper
     state: directory

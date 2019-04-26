@@ -1,7 +1,7 @@
 ---
 - name: Install hadoop master node
   hosts: hadoop-master
-  remote_user: ubuntu
+  remote_user: vagrant
   sudo: yes
 
   roles:
@@ -11,7 +11,7 @@
 
 - name: Install hadoop data nodes
   hosts: hadoop-data
-  remote_user: ubuntu
+  remote_user: vagrant
   sudo: yes
 
   roles:
