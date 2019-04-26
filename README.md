@@ -19,3 +19,10 @@ For network we use a private bridge and a nat to acces machine with ssh and to a
 you only have to lunch **start.sh** to create and configure cluster or you can create your own machines and lunch separately each playbook if you change there environement config.  
 Description of playbook is linked at the top of this short presentation.   
 then go to
+```
+sudo su - hadoop
+/usr/local/hadoop/bin/hdfs namenode -format
+/usr/local/hadoop/sbin/start-dfs.sh
+/usr/local/hadoop/sbin/start-yarn.sh
+/home/hadoop/hbase/hbase-2.1.4/bin/start-hbase.sh
+```

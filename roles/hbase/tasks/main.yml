@@ -13,16 +13,21 @@
     state: directory
     mode: 777
 
-- name: Download hbase
-  get_url: url={{ hbase_download_url }} dest=/home/{{ hadoop_user }}/hbase/hbase-1.4.9-bin.tar.gz
-  environment: proxy_env
+#- name: Download hbase
+#  get_url: url={{ hbase_download_url }} dest=/home/{{ hadoop_user }}/hbase/hbase-1.4.9-bin.tar.gz
+#  environment: proxy_env
 
-- name: Extract hadoop archive
-  unarchive: src=/home/{{ hadoop_user }}/hbase/hbase-1.4.9-bin.tar.gz dest=/home/{{ hadoop_user }}/hbase/ owner={{ hadoop_user}} group={{ hadoop_group }} copy=no
+#- name: Extract hbase archive
+#  unarchive: src=/home/{{ hadoop_user }}/hbase/hbase-1.4.9-bin.tar.gz dest=/home/{{ hadoop_user }}/hbase/ owner={{ hadoop_user}} group={{ hadoop_group }} copy=no
 
 #- name: Download htrace
 #  get_url: url={{ htrace_download_url }} dest=/home/{{ hadoop_user }}/hbase/hbase-2.1.4/lib/client-facing-thirdparty/htrace-core-3.1.0-incubating.jar
 #  environment: proxy_env
+
+# this is an alternative for the local deployment where the hadoop binary can be cached locally
+- name: unpack hbase
+  unarchive: src=roles/hbase/templates/hbase-1.4.9-bin.tar.gz dest=/home/{{ hadoop_user }}/hbase/ owner={{ hadoop_user}} group={{ hadoop_group }}
+
 
 - lineinfile: dest=/home/hadoop/.bashrc regexp="HBASE_HOME=" line="export HBASE_HOME=/home/hadoop/hbase/hbase-1.4.9"
 - lineinfile: dest=/home/hadoop/.bashrc regexp="PATH=" line="export PATH=$HBASE_HOME/bin:$PATH"s
