@@ -52,6 +52,7 @@ then
 	  then
 	     wget $hadoop_download_url -P roles/common/templates/
        wget $hbase_download_url -P roles/hbase/templates/
+       wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" https://download.oracle.com/otn-pub/java/jdk/12.0.1+12/69cfe15208a647278a19ef0990eea691/jdk-12.0.1_linux-x64_bin.tar.gz -P roles/oraclejava8/templates/
        creator
 		   tmp=$(($tmp + 1))
     elif test "$answer" = "NO" || test "$answer" = "no" || test "$answer" = "No" || test "$answer" = "N" || test "$answer" = "n" ;

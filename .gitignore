@@ -1,3 +1,4 @@
 .vagrant/
 roles/hbase/templates/hbase-1.4.9-bin.tar.gz
 roles/common/templates/hadoop-3.1.2.tar.gz
+roles/oraclejava8/templates/jdk-12.0.1_linux-x64_bin.tar.gz

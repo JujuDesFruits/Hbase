@@ -23,7 +23,6 @@
 
 - lineinfile: dest=/home/hadoop/.bashrc regexp="HADOOP_HOME=" line="export HADOOP_HOME=/usr/local/hadoop"
 - lineinfile: dest=/home/hadoop/.bashrc regexp="PATH=" line="export PATH=$PATH:$HADOOP_HOME/bin"
-- lineinfile: dest=/home/hadoop/.bashrc regexp="HADOOP_SSH_OPTS=" line="export HADOOP_SSH_OPTS=\"-i /home/{{ hadoop_user }}/.ssh/hadoop_rsa\""
 
 # Idempotent way to build a /etc/hosts file with Ansible using your Ansible hosts inventory for a source.
 # Will include all hosts the playbook is run on.
@@ -47,4 +46,4 @@
     - {src: "yarn-site.xml", dest: "/usr/local/hadoop/etc/hadoop/yarn-site.xml"}
     - {src: "mapred-site.xml", dest: "/usr/local/hadoop/etc/hadoop/mapred-site.xml"}
 
-- lineinfile: dest=/usr/local/hadoop/etc/hadoop/hadoop-env.sh regexp="^export JAVA_HOME" line="export JAVA_HOME=/usr/lib/jvm/java-8-oracle"
+- lineinfile: dest=/usr/local/hadoop/etc/hadoop/hadoop-env.sh regexp="^export JAVA_HOME" line="export JAVA_HOME=/usr/lib/jvm/jdk-12.0.1"

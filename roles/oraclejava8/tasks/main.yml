@@ -1,16 +1,14 @@
 ---
-- apt_repository: repo='deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main' state=present
-  environment: proxy_env
-- apt_repository: repo='deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main' state=present
-  environment: proxy_env
+- name: Creates directory
+  file: path=/usr/lib/jvm state=directory
 
-- debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select' unseen=false
+- name: unpack java
+  unarchive: src=roles/oraclejava8/templates/jdk-12.0.1_linux-x64_bin.tar.gz dest=/usr/lib/jvm owner={{ hadoop_user}} group={{ hadoop_group }}
 
-- name: PGP key for Oracle into place
-  shell: sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EEA14886
+- lineinfile: dest=/home/hadoop/.bashrc regexp="^export JAVA_HOME" line="export JAVA_HOME=/usr/lib/jvm/jdk-12.0.1"
 
-- name: Install Java
-  apt: pkg=oracle-java8-installer state=installed update_cache=true
-  environment: proxy_env
+- apt: update_cache=yes upgrade=yes cache_valid_time=86400
 
-- lineinfile: dest=/home/hadoop/.bashrc regexp="^export JAVA_HOME" line="export JAVA_HOME=/usr/lib/jvm/java-8-oracle"
+- package:
+    name: openjdk-7-jdk
+    state: present

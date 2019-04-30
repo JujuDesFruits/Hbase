@@ -6,7 +6,7 @@
 MASTER_IP               = '192.168.56.101'
 DATA1_IP                = '192.168.56.102'
 DATA2_IP                = '192.168.56.103'
-OS                      = "debian/jessie64"
+OS                      = "ubuntu/trusty64"
 
 Vagrant.configure("2") do |config|
 
